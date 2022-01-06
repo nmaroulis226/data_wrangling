@@ -1,0 +1,31 @@
+---
+title: "Data Wrangling"
+author: "Sean Li and Ben Thorpe"
+date: "TBD"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r packages}
+library(tidyverse)
+library(Lahman)
+```
+
+
+# Data Wrangling
+
+## Exploring dplyr
+
+dplyr is a package within the tidyverse
+
+
+## Try it yourself 
+
+
+
+## Diving in

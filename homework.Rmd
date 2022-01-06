@@ -1,0 +1,28 @@
+---
+title: "homework"
+author: "Sean Li and Ben Thorpe"
+date: "Due before" 
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+This homework is meant to help you get comfortable working with git and github and RStudio. It involves many key parts such as creating a repository, practicing good documentation, and committing/pushing your work. 
+
+
+## Homework Instructions
+
+Complete the exercises below through creating and pushing your own github repository. 
+Once you are done, commit and push one last time to make sure all your changes are tracked. Then fill out the google form below. 
+
+TURN IT IN HERE: 
+
+
+
+
+
+## Exercises
+
