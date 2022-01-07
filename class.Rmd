@@ -13,19 +13,55 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r packages}
 library(tidyverse)
-library(Lahman)
+library(hoopR)
 ```
 
 
 # Data Wrangling
 
+## Loading in Data
+
+- loading in from packages
+```{r}
+tictoc::tic()
+progressr::with_progress({
+  nba_pbp <- hoopR::load_nba_pbp(2016:2021)
+})
+tictoc::toc()
+```
+
+```{r}
+glimpse(nba_pbp)
+```
+
+
+- loading in from .csv
+
+- loading in from .xlsx
+
 ## Exploring dplyr
 
 dplyr is a package within the tidyverse
 
+- Select,filter, arrange, mutate, summarise
+- split into row and column functions 
+- splice() and rename() and drop NA
+- Have them try a few exercises
+- Group_by + summarise 
+
+
+
 
 ## Try it yourself 
+- have a few simple exercises to practice basic dplyr functions
+- maybe one of each function
+
+
+## Combining it together
+
+- cover join stuff
+- getting min and max of some variables
 
 
 
-## Diving in
+
