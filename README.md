@@ -1,4 +1,4 @@
-# data_wrangling
+# Data Wrangling
 
 
 This is the 2nd installment of Duke Sports Analytics Mini Course in R.
@@ -19,7 +19,8 @@ Data is provided in the folder in the repository.
 
 dplyr is a key data wrangling package that we will learn to use and apply. 
 
-Highly recommend reading from the official website to get a clearer picture of how each function works. https://dplyr.tidyverse.org/articles/dplyr.html 
+Highly recommend reading from the official website to get a clearer picture of how each function works.
+https://dplyr.tidyverse.org/articles/dplyr.html 
 
 
 ## Resources
