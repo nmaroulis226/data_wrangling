@@ -14,6 +14,11 @@ Loading in data is going to be essential to any project. Last time we used data
 from packages we loaded in. This time, we will want to use outside data. 
 Data is provided in the folder in the repository. 
 
+The data we will be working with comes from basketball-reference.com, an open source NBA data website. We will
+specifically be using 2021-2022 NBA player data. https://www.basketball-reference.com/leagues/NBA_2022_per_game.html
+
+A description of each column header representing the stat can also be found at the link above by
+hovering over the desired text. 
 
 ## Working with dplyr
 
