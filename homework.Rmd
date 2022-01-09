@@ -25,7 +25,7 @@ https://www.basketball-reference.com/leagues/NBA_2022_per_game.html
 
 Once you are done, commit and push one last time to make sure all your changes are tracked. Then fill out the google form below. 
 
-TURN IT IN HERE: 
+TURN IT IN HERE: https://forms.gle/PVqBb7JhaaKnTvAXA
 
 
 
@@ -48,7 +48,7 @@ data <- read.xlsx(xlsxFile = "data/nbadata.xlsx")
 ```
 
 
-2. Take a look at the data using glimpse()
+2. Take a look at the data using glimpse()... what seems to be a bit off about the player names?
 
 
 3. String Parsing
@@ -60,13 +60,13 @@ Lets try to fix our issue with the names of each player.
 
 Here a few exercises that are more guided and easier to complete. 
 
-How many players are on the Charlotte Hornets? 
+1. How many players are on the Charlotte Hornets? 
 
-How many shooting guards do the Milwaukee Bucks have?
+2. How many shooting guards do the Milwaukee Bucks have?
 
-Who is leading the league in turnovers per game? 
+3. Who is leading the league in turnovers per game? 
 
-How many 3 point attempts does the average NBA player attempt? How many more does Steph Curry attempt? 
+4. How many 3 point attempts does the average NBA player attempt? How many more does Steph Curry attempt? 
 
 
 
@@ -79,13 +79,15 @@ get all players who are 22 years old who have played at least 10 games. Then I n
 
 If you are stuck, first google, then reach out for help. 
 
-How many players are in this dataset? (HINT: its not just the number of rows)
+5. How many players are in this dataset? (HINT: its not just the number of rows)
 
-Find Atlantic Division (Nets, 76ers, Raptors, Celtics, Knicks) team's top 3 point shooter based on 3PT percentage that has attempted at least 3 a game. 
+6. Find Atlantic Division (Nets, 76ers, Raptors, Celtics, Knicks) team's top 3 point shooter based on 3PT percentage that has attempted at least 3 a game. 
 
-What is the average age on the Minnesota Timberwolves? 
+7. What is the average age on the Minnesota Timberwolves? 
 
-Which Power Forward (PF) has the largest differential between their offensive and defensive rebounding stats per game?
+8. Which Power Forward (PF) has the largest differential between their offensive and defensive rebounding stats per game?
+
+CHALLENGE: Create a report of the 2021-2022 Phoenix Suns describing the following: leaders in all 5 box score categories(points, rebounds, assists, steals, blocks), most frequent starting lineup, and most underrated player. For the last part to determine the underrated player, I want you to pick your statistical criterion to determine "underratedness" and give an analysis on why you choose that player. 
 
 
 
