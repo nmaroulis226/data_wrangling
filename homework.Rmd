@@ -10,19 +10,52 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-This homework is meant to help you get comfortable working with git and github and RStudio. It involves many key parts such as creating a repository, practicing good documentation, and committing/pushing your work. 
+The main goals of this homework is to let you practice data loading, data cleaning, and finding useful information. It will mimic the process you will go through in a real sports analysis endeavor. 
+
+Remember, this is important because often times in the project, half the work is getting the right data! 
 
 
 ## Homework Instructions
 
-Complete the exercises below through creating and pushing your own github repository. 
+Complete the exercises below through creating a new RMD file in the same repository you had your first homework done in. You are also welcome to create a new repository to do this homework too. 
+
+Data for this homework can be found through the class repository. You can obtain it through downloading the file directly from the repository on Github or downloading the data from 
+https://www.basketball-reference.com/leagues/NBA_2022_per_game.html
+
+
 Once you are done, commit and push one last time to make sure all your changes are tracked. Then fill out the google form below. 
 
 TURN IT IN HERE: 
 
 
 
-
-
 ## Exercises
+
+```{r libraries}
+library(tidyverse)
+library(openxlsx)
+```
+
+
+### Loading in the Data
+
+Today we will be working with 2021-2022 NBA Player Stats Data. 
+
+1. Load in the data (make sure datafile is in repository folder!!)
+
+2. Take a look at the data using glimpse()
+
+
+### Rumble. 
+
+2. How many players are in this dataset? (HINT: its not just the number of rows)
+
+3. 
+
+
+
+
+
+
+
 
