@@ -43,14 +43,52 @@ Today we will be working with 2021-2022 NBA Player Stats Data.
 
 1. Load in the data (make sure datafile is in repository folder!!)
 
+```{r}
+data <- read.xlsx(xlsxFile = "data/nbadata.xlsx")
+```
+
+
 2. Take a look at the data using glimpse()
+
+
+3. String Parsing
+
+Lets try to fix our issue with the names of each player. 
+
+
+### Training Wheels
+
+Here a few exercises that are more guided and easier to complete. 
+
+How many players are on the Charlotte Hornets? 
+
+How many shooting guards do the Milwaukee Bucks have?
+
+Who is leading the league in turnovers per game? 
+
+How many 3 point attempts does the average NBA player attempt? How many more does Steph Curry attempt? 
+
+
 
 
 ### Rumble. 
 
-2. How many players are in this dataset? (HINT: its not just the number of rows)
+These are questions made to have you think how to problem solve. I would recommend
+breaking down some of these problems into several steps. For example, to find the top 5 22-year old players who have high assist to turnover ratios this would be my thinking: "first i need to
+get all players who are 22 years old who have played at least 10 games. Then I need to make a new variable to track assist to turnover ratio. Then I need to sort the names by descending according to that ratio. Then I need to display the first 5 unique names." 
 
-3. 
+If you are stuck, first google, then reach out for help. 
+
+How many players are in this dataset? (HINT: its not just the number of rows)
+
+Find Atlantic Division (Nets, 76ers, Raptors, Celtics, Knicks) team's top 3 point shooter based on 3PT percentage that has attempted at least 3 a game. 
+
+What is the average age on the Minnesota Timberwolves? 
+
+Which Power Forward (PF) has the largest differential between their offensive and defensive rebounding stats per game?
+
+
+
 
 
 
