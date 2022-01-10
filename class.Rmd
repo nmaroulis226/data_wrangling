@@ -22,7 +22,8 @@ library(hoopR)
 ## Loading in Data
 
 - loading in from packages
-      ```{r}
+
+```{r}
 tictoc::tic()
 progressr::with_progress({
   nba_pbp <- hoopR::load_nba_pbp(2016:2021)

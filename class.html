@@ -186,19 +186,14 @@ pre code {
 <div id="loading-in-data" class="section level2">
 <h2>Loading in Data</h2>
 <ul>
-<li><p>loading in from packages</p>
-<pre><code>```r
-tictoc::tic()
+<li>loading in from packages</li>
+</ul>
+<pre class="r"><code>tictoc::tic()
 progressr::with_progress({
   nba_pbp &lt;- hoopR::load_nba_pbp(2016:2021)
 })
-tictoc::toc()
-```
-
-```
-## 35.45 sec elapsed
-```</code></pre></li>
-</ul>
+tictoc::toc()</code></pre>
+<pre><code>## 44.08 sec elapsed</code></pre>
 <pre class="r"><code>glimpse(nba_pbp)</code></pre>
 <pre><code>## Rows: 3,743,046
 ## Columns: 55
