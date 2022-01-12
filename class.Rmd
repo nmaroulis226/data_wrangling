@@ -22,6 +22,7 @@ library(hoopR)
 ## Loading in Data
 
 - loading in from packages
+
 ```{r}
 tictoc::tic()
 progressr::with_progress({
@@ -49,6 +50,16 @@ dplyr is a package within the tidyverse
 - Have them try a few exercises
 - Group_by + summarise 
 
+The "pipe" operator takes the object on the left-hand-side and passes it into
+the object on the right-hand-side. Rather than write `f(x, y)` one could
+write `x %>% f(y)`.
+
+Let's `select()` the `shooting_play`, runs allowed, wins, year, and team name.
+
+```{r}
+# teams %>% 
+#  select(R, RA, W, yearID, name)
+```
 
 
 

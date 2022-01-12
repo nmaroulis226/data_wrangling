@@ -39,7 +39,7 @@ library(openxlsx)
 
 ### Loading in the Data
 
-Today we will be working with 2021-2022 NBA Player Stats Data. 
+We will be working with 2021-2022 NBA Player Stats Data. 
 
 1. Load in the data (make sure datafile is in repository folder!!)
 
@@ -87,7 +87,7 @@ If you are stuck, first google, then reach out for help.
 
 8. Which Power Forward (PF) has the largest differential between their offensive and defensive rebounding stats per game?
 
-CHALLENGE: Create a report of the 2021-2022 Phoenix Suns describing the following: leaders in all 5 box score categories(points, rebounds, assists, steals, blocks), most frequent starting lineup, and most underrated player. For the last part to determine the underrated player, I want you to pick your statistical criterion to determine "underratedness" and give an analysis on why you choose that player. 
+CHALLENGE: Create a report of the 2021-2022 Phoenix Suns describing the following: leaders in all 5 box score categories (points, rebounds, assists, steals, blocks), most frequent starting lineup, and most underrated player. For the last part to determine the underrated player, I want you to pick your statistical criterion to determine "underratedness" and give an analysis on why you choose that player. 
 
 
 
