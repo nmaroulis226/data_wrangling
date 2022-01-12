@@ -12,10 +12,12 @@ Highly recommend reading from the official website to get a clearer picture of h
 Some of the other resources include more advanced data manipulation techniques we did not 
 cover in class.
 
-- [Official Website] (https://dplyr.tidyverse.org/articles/dplyr.html) 
-- [Data Manipulation] (https://cengel.github.io/R-data-wrangling/)
-- [Video] (https://youtu.be/Zc_ufg4uW4U)
-- [Slides from 199] (https://sta199-fa20-002.netlify.app/slides/05-tidy-data-wrangle.pdf)
+HYPERLINKS:
+
+- [Official Website](https://dplyr.tidyverse.org/articles/dplyr.html) 
+- [Data Manipulation](https://cengel.github.io/R-data-wrangling/)
+- [Video](https://youtu.be/Zc_ufg4uW4U)
+- [Slides from 199](https://sta199-fa20-002.netlify.app/slides/05-tidy-data-wrangle.pdf)
 
 ## Further Resources
 Want to further your understanding of some of the functions used in the
