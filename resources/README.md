@@ -1,11 +1,7 @@
 # Resources | Data Wrangling Workshop
 
+All resources are linked below as supplemental material to help you understand data wrangling.
 
-
-## 
-
-
-. 
 
 ## Readings
 
@@ -18,9 +14,8 @@ cover in class.
 
 [Official Website] (https://dplyr.tidyverse.org/articles/dplyr.html) 
 [Data Manipulation] (https://cengel.github.io/R-data-wrangling/)
-
-
-
+[Video] (https://youtu.be/Zc_ufg4uW4U)
+[Slides from 199] (https://sta199-fa20-002.netlify.app/slides/05-tidy-data-wrangle.pdf)
 
 ## Further Resources
 Want to further your understanding of some of the functions used in the
