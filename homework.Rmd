@@ -66,7 +66,7 @@ Here a few exercises that are more guided and easier to complete.
 
 3. Who is leading the league in turnovers per game? 
 
-4. How many 3 point attempts does the average NBA player attempt? How many more does Steph Curry attempt? 
+4. How many 3 point attempts does the average NBA player attempt per game? How many more does Steph Curry attempt? 
 
 
 
@@ -81,21 +81,12 @@ If you are stuck, first google, then reach out for help.
 
 5. How many players are in this dataset? (HINT: its not just the number of rows)
 
-6. Find Atlantic Division (Nets, 76ers, Raptors, Celtics, Knicks) team's top 3 point shooter based on 3PT percentage that has attempted at least 3 a game. 
+6. Find Atlantic Division (Nets, 76ers, Raptors, Celtics, Knicks) teams' top 3 point shooter based on 3PT percentage that has attempted at least 3 a game. 
 
 7. What is the average age on the Minnesota Timberwolves? 
 
 8. Which Power Forward (PF) has the largest differential between their offensive and defensive rebounding stats per game?
 
 CHALLENGE: Create a report of the 2021-2022 Phoenix Suns describing the following: leaders in all 5 box score categories (points, rebounds, assists, steals, blocks), most frequent starting lineup, and most underrated player. For the last part to determine the underrated player, I want you to pick your statistical criterion to determine "underratedness" and give an analysis on why you choose that player. 
-
-
-
-
-
-
-
-
-
 
 

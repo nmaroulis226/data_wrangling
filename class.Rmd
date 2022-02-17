@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r packages}
 library(tidyverse)
 library(hoopR)
+library(openxlsx)
 ```
 
 
@@ -26,7 +27,7 @@ library(hoopR)
 ```{r}
 tictoc::tic()
 progressr::with_progress({
-  nba_pbp <- hoopR::load_nba_pbp(2016:2021)
+  nba_pbp <- hoopR::load_nba_pbp(2021)
 })
 tictoc::toc()
 ```
@@ -35,10 +36,18 @@ tictoc::toc()
 glimpse(nba_pbp)
 ```
 
-
 - loading in from .csv
 
+```{r}
+#csv_data <- read.csv("data/2019-20_pbp.csv")
+```
+
+
 - loading in from .xlsx
+
+```{r}
+xlsx_data <- read.xlsx(xlsxFile = "data/nbadata.xlsx")
+```
 
 ## Exploring dplyr
 
@@ -54,25 +63,102 @@ The "pipe" operator takes the object on the left-hand-side and passes it into
 the object on the right-hand-side. Rather than write `f(x, y)` one could
 write `x %>% f(y)`.
 
-Let's `select()` the `shooting_play`, runs allowed, wins, year, and team name.
+Let's `select()` the `period_number`and `clock_display_value`.
 
 ```{r}
-# teams %>% 
-#  select(R, RA, W, yearID, name)
+clock_data <- nba_pbp %>% 
+  select(period_number, clock_display_value) %>%
+  head(10000)
+clock_data
+```
+
+Filters:
+
+```{r}
+nba_pbp %>%
+  filter(home_score == 100 & away_score == 100)
+
+nba_pbp %>%
+  filter((home_score > 100 & home_team_mascot == "Heat") | (away_score > 100 & away_team_mascot == "Heat")) %>%
+  select(home_score, away_score, home_team_mascot, away_team_mascot)
+
+nba_pbp %>%
+  filter(home_score == c(120, 130, 140)) %>%
+  arrange(desc(home_score)) %>%
+  select(period_display_value, home_team_abbrev, away_team_abbrev, home_score, away_score)
+
+nba_pbp %>%
+  filter(grepl('LeBron', text)) %>%
+  head(1) %>%
+  select(text) %>%
+  pull()
 ```
 
 
+Quick groupby intro:
 
-## Try it yourself 
-- have a few simple exercises to practice basic dplyr functions
-- maybe one of each function
+```{r}
+nba_pbp %>%
+  group_by(type_text) %>%
+  count() %>%
+  arrange(desc(n)) %>%
+  select(type_text) %>%
+  head(5)
+  
+
+nba_pbp %>%
+  group_by(type_text) %>%
+  summarise(mean_secs = mean(start_quarter_seconds_remaining), sd_secs = sd(start_quarter_seconds_remaining))
+```
+
+Dropping NA values:
+
+```{r}
+nba_pbp %>% drop_na()
+
+nba_pbp %>% drop_na(participants_1_athlete_id)
+```
+
+Creating new columns with `mutate()`:
+
+```{r}
+nba_pbp %>%
+  mutate(total_score = home_score + away_score) %>%
+  select(home_score, away_score, total_score)
+
+nba_pbp %>%
+  mutate(home_team_favored = ifelse(game_spread < 0, TRUE, FALSE)) %>%
+  select(game_spread, home_team_favored, home_team_abbrev) %>%
+  arrange(desc(home_team_favored))
+```
 
 
-## Combining it together
+## Example: Who had the best record against the spread?
 
-- cover join stuff
-- getting min and max of some variables
+```{r}
+spread_data <- nba_pbp %>%
+  group_by(game_id) %>%
+  slice(which.max(game_play_number)) %>%
+  select(game_spread, home_team_abbrev, away_team_abbrev, home_score, away_score) %>%
+  mutate(score_diff = away_score - home_score, home_covered = ifelse(score_diff<game_spread, TRUE, FALSE),
+         away_covered = ifelse(score_diff>game_spread, TRUE, FALSE))
+spread_data
 
+spread_home <- spread_data %>% 
+  group_by(home_team_abbrev, home_covered) %>%
+  count() %>%
+  pivot_wider(names_from = home_covered, values_from = n)
+spread_home
 
+spread_away <- spread_data %>% 
+  group_by(away_team_abbrev, away_covered) %>%
+  count() %>%
+  pivot_wider(names_from = away_covered, values_from = n)
 
-
+merge(spread_home, spread_away, by.x="home_team_abbrev", by.y="away_team_abbrev") %>%
+  mutate(cover_perc=(TRUE.x + TRUE.y)/(TRUE.x + TRUE.y + FALSE.x + FALSE.y)) %>%
+  rename(team=home_team_abbrev) %>%
+  arrange(desc(cover_perc)) %>%
+  head(5) %>%
+  select(team, cover_perc)
+```

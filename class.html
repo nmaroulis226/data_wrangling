@@ -180,7 +180,8 @@ pre code {
 <pre><code>## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(hoopR)</code></pre>
+<pre class="r"><code>library(hoopR)
+library(openxlsx)</code></pre>
 <div id="data-wrangling" class="section level1">
 <h1>Data Wrangling</h1>
 <div id="loading-in-data" class="section level2">
@@ -190,72 +191,76 @@ pre code {
 </ul>
 <pre class="r"><code>tictoc::tic()
 progressr::with_progress({
-  nba_pbp &lt;- hoopR::load_nba_pbp(2016:2021)
+  nba_pbp &lt;- hoopR::load_nba_pbp(2021)
 })
 tictoc::toc()</code></pre>
-<pre><code>## 44.08 sec elapsed</code></pre>
+<pre><code>## 6.37 sec elapsed</code></pre>
 <pre class="r"><code>glimpse(nba_pbp)</code></pre>
-<pre><code>## Rows: 3,743,046
+<pre><code>## Rows: 569,719
 ## Columns: 55
-## $ shooting_play                   &lt;lgl&gt; FALSE, TRUE, FALSE, TRUE, TRUE, TRUE, ~
-## $ sequence_number                 &lt;chr&gt; &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;5&quot;, &quot;6&quot;, &quot;8&quot;, &quot;9&quot;, &quot;10~
+## $ shooting_play                   &lt;lgl&gt; FALSE, FALSE, TRUE, FALSE, FALSE, TRUE~
+## $ sequence_number                 &lt;chr&gt; &quot;4&quot;, &quot;7&quot;, &quot;9&quot;, &quot;10&quot;, &quot;11&quot;, &quot;13&quot;, &quot;14&quot;,~
 ## $ period_display_value            &lt;chr&gt; &quot;1st Quarter&quot;, &quot;1st Quarter&quot;, &quot;1st Qua~
 ## $ period_number                   &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,~
-## $ home_score                      &lt;int&gt; 0, 0, 0, 0, 2, 2, 2, 2, 2, 4, 4, 4, 4,~
-## $ coordinate_x                    &lt;int&gt; 25, 23, 25, 37, 33, 13, 25, 17, 25, 9,~
-## $ coordinate_y                    &lt;int&gt; -8, -1, -8, 7, 10, 16, -8, 3, -8, -1, ~
-## $ scoring_play                    &lt;lgl&gt; FALSE, FALSE, FALSE, TRUE, TRUE, FALSE~
-## $ clock_display_value             &lt;chr&gt; &quot;12:00&quot;, &quot;11:41&quot;, &quot;11:38&quot;, &quot;11:21&quot;, &quot;1~
-## $ team_id                         &lt;chr&gt; &quot;1&quot;, &quot;8&quot;, &quot;1&quot;, &quot;8&quot;, &quot;1&quot;, &quot;1&quot;, &quot;8&quot;, &quot;8&quot;~
-## $ type_id                         &lt;chr&gt; &quot;11&quot;, &quot;110&quot;, &quot;155&quot;, &quot;132&quot;, &quot;132&quot;, &quot;92&quot;~
-## $ type_text                       &lt;chr&gt; &quot;Jump Ball&quot;, &quot;Driving Layup Shot&quot;, &quot;De~
-## $ away_score                      &lt;int&gt; 0, 0, 0, 2, 2, 4, 4, 4, 4, 4, 5, 5, 5,~
-## $ id                              &lt;dbl&gt; 4008278881, 4008278882, 4008278883, 40~
-## $ text                            &lt;chr&gt; &quot;Andre Drummond vs. Al Horford (Ersan ~
-## $ score_value                     &lt;int&gt; 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0,~
-## $ participants_0_athlete_id       &lt;chr&gt; &quot;3213&quot;, &quot;6585&quot;, &quot;6637&quot;, &quot;6462&quot;, &quot;3015&quot;~
-## $ participants_1_athlete_id       &lt;chr&gt; &quot;6585&quot;, &quot;3213&quot;, NA, &quot;6585&quot;, &quot;2011&quot;, NA~
-## $ participants_2_athlete_id       &lt;chr&gt; &quot;2767&quot;, NA, NA, NA, NA, NA, NA, NA, NA~
-## $ season                          &lt;int&gt; 2016, 2016, 2016, 2016, 2016, 2016, 20~
-## $ season_type                     &lt;int&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,~
-## $ away_team_id                    &lt;int&gt; 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,~
-## $ away_team_name                  &lt;chr&gt; &quot;Detroit&quot;, &quot;Detroit&quot;, &quot;Detroit&quot;, &quot;Detr~
-## $ away_team_mascot                &lt;chr&gt; &quot;Pistons&quot;, &quot;Pistons&quot;, &quot;Pistons&quot;, &quot;Pist~
-## $ away_team_abbrev                &lt;chr&gt; &quot;DET&quot;, &quot;DET&quot;, &quot;DET&quot;, &quot;DET&quot;, &quot;DET&quot;, &quot;DE~
-## $ away_team_name_alt              &lt;chr&gt; &quot;Detroit&quot;, &quot;Detroit&quot;, &quot;Detroit&quot;, &quot;Detr~
+## $ home_score                      &lt;int&gt; 0, 0, 0, 0, 0, 1, 2, 3, 3, 5, 5, 5, 7,~
+## $ coordinate_x                    &lt;int&gt; -214748340, 32, 2, 2, 43, -214748340, ~
+## $ coordinate_y                    &lt;int&gt; -214748365, 3, -2, -2, 16, -214748365,~
+## $ scoring_play                    &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, TRU~
+## $ clock_display_value             &lt;chr&gt; &quot;12:00&quot;, &quot;11:46&quot;, &quot;11:27&quot;, &quot;11:23&quot;, &quot;1~
+## $ team_id                         &lt;chr&gt; &quot;1&quot;, &quot;1&quot;, &quot;19&quot;, &quot;1&quot;, &quot;19&quot;, &quot;1&quot;, &quot;1&quot;, &quot;~
+## $ type_id                         &lt;chr&gt; &quot;615&quot;, &quot;62&quot;, &quot;121&quot;, &quot;155&quot;, &quot;44&quot;, &quot;100&quot;~
+## $ type_text                       &lt;chr&gt; &quot;Jumpball&quot;, &quot;Bad Pass\nTurnover&quot;, &quot;Fad~
+## $ away_score                      &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3,~
+## $ id                              &lt;dbl&gt; 4012657844, 4012657847, 4012657849, 40~
+## $ text                            &lt;chr&gt; &quot;Nikola Vucevic vs. Clint Capela (Trae~
+## $ score_value                     &lt;int&gt; 0, 0, 0, 0, 0, 1, 1, 1, 3, 2, 0, 0, 2,~
+## $ participants_0_athlete_id       &lt;chr&gt; &quot;3102529&quot;, &quot;4277905&quot;, &quot;6588&quot;, &quot;3102529~
+## $ participants_1_athlete_id       &lt;chr&gt; &quot;6478&quot;, &quot;6588&quot;, NA, NA, NA, NA, NA, NA~
+## $ participants_2_athlete_id       &lt;chr&gt; &quot;4277905&quot;, NA, NA, NA, NA, NA, NA, NA,~
+## $ season                          &lt;int&gt; 2021, 2021, 2021, 2021, 2021, 2021, 20~
+## $ season_type                     &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,~
+## $ away_team_id                    &lt;int&gt; 19, 19, 19, 19, 19, 19, 19, 19, 19, 19~
+## $ away_team_name                  &lt;chr&gt; &quot;Orlando&quot;, &quot;Orlando&quot;, &quot;Orlando&quot;, &quot;Orla~
+## $ away_team_mascot                &lt;chr&gt; &quot;Magic&quot;, &quot;Magic&quot;, &quot;Magic&quot;, &quot;Magic&quot;, &quot;M~
+## $ away_team_abbrev                &lt;chr&gt; &quot;ORL&quot;, &quot;ORL&quot;, &quot;ORL&quot;, &quot;ORL&quot;, &quot;ORL&quot;, &quot;OR~
+## $ away_team_name_alt              &lt;chr&gt; &quot;Orlando&quot;, &quot;Orlando&quot;, &quot;Orlando&quot;, &quot;Orla~
 ## $ home_team_id                    &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,~
 ## $ home_team_name                  &lt;chr&gt; &quot;Atlanta&quot;, &quot;Atlanta&quot;, &quot;Atlanta&quot;, &quot;Atla~
 ## $ home_team_mascot                &lt;chr&gt; &quot;Hawks&quot;, &quot;Hawks&quot;, &quot;Hawks&quot;, &quot;Hawks&quot;, &quot;H~
 ## $ home_team_abbrev                &lt;chr&gt; &quot;ATL&quot;, &quot;ATL&quot;, &quot;ATL&quot;, &quot;ATL&quot;, &quot;ATL&quot;, &quot;AT~
 ## $ home_team_name_alt              &lt;chr&gt; &quot;Atlanta&quot;, &quot;Atlanta&quot;, &quot;Atlanta&quot;, &quot;Atla~
-## $ home_team_spread                &lt;dbl&gt; 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,~
-## $ game_spread                     &lt;dbl&gt; -7, -7, -7, -7, -7, -7, -7, -7, -7, -7~
+## $ home_team_spread                &lt;dbl&gt; 7.5, 7.5, 7.5, 7.5, 7.5, 7.5, 7.5, 7.5~
+## $ game_spread                     &lt;dbl&gt; -7.5, -7.5, -7.5, -7.5, -7.5, -7.5, -7~
 ## $ home_favorite                   &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TR~
 ## $ game_spread_available           &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TR~
-## $ game_id                         &lt;int&gt; 400827888, 400827888, 400827888, 40082~
+## $ game_id                         &lt;int&gt; 401265784, 401265784, 401265784, 40126~
 ## $ qtr                             &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,~
-## $ time                            &lt;chr&gt; &quot;12:00&quot;, &quot;11:41&quot;, &quot;11:38&quot;, &quot;11:21&quot;, &quot;1~
-## $ clock_minutes                   &lt;int&gt; 12, 11, 11, 11, 11, 10, 10, 10, 10, 9,~
-## $ clock_seconds                   &lt;dbl&gt; 0, 41, 38, 21, 0, 26, 25, 12, 11, 41, ~
+## $ time                            &lt;chr&gt; &quot;12:00&quot;, &quot;11:46&quot;, &quot;11:27&quot;, &quot;11:23&quot;, &quot;1~
+## $ clock_minutes                   &lt;int&gt; 12, 11, 11, 11, 11, 11, 11, 11, 11, 10~
+## $ clock_seconds                   &lt;dbl&gt; 0, 46, 27, 23, 21, 21, 21, 21, 5, 42, ~
 ## $ half                            &lt;chr&gt; &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;~
 ## $ game_half                       &lt;chr&gt; &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;~
 ## $ lag_qtr                         &lt;dbl&gt; NA, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1~
 ## $ lead_qtr                        &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,~
 ## $ lag_game_half                   &lt;chr&gt; NA, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;,~
 ## $ lead_game_half                  &lt;chr&gt; &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;~
-## $ start_quarter_seconds_remaining &lt;int&gt; 720, 701, 698, 681, 660, 626, 625, 612~
-## $ start_half_seconds_remaining    &lt;int&gt; 1320, 1301, 1298, 1281, 1260, 1226, 12~
-## $ start_game_seconds_remaining    &lt;int&gt; 2520, 2501, 2498, 2481, 2460, 2426, 24~
+## $ start_quarter_seconds_remaining &lt;int&gt; 720, 706, 687, 683, 681, 681, 681, 681~
+## $ start_half_seconds_remaining    &lt;int&gt; 1320, 1306, 1287, 1283, 1281, 1281, 12~
+## $ start_game_seconds_remaining    &lt;int&gt; 2520, 2506, 2487, 2483, 2481, 2481, 24~
 ## $ game_play_number                &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,~
-## $ end_quarter_seconds_remaining   &lt;dbl&gt; 600, 720, 701, 698, 681, 660, 626, 625~
-## $ end_half_seconds_remaining      &lt;dbl&gt; 1200, 1320, 1301, 1298, 1281, 1260, 12~
-## $ end_game_seconds_remaining      &lt;dbl&gt; 2400, 2520, 2501, 2498, 2481, 2460, 24~
+## $ end_quarter_seconds_remaining   &lt;dbl&gt; 600, 720, 706, 687, 683, 681, 681, 681~
+## $ end_half_seconds_remaining      &lt;dbl&gt; 1200, 1320, 1306, 1287, 1283, 1281, 12~
+## $ end_game_seconds_remaining      &lt;dbl&gt; 2400, 2520, 2506, 2487, 2483, 2481, 24~
 ## $ period                          &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,~
-## $ type_abbreviation               &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~</code></pre>
+## $ type_abbreviation               &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~</code></pre>
 <ul>
-<li><p>loading in from .csv</p></li>
-<li><p>loading in from .xlsx</p></li>
+<li>loading in from .csv</li>
 </ul>
+<pre class="r"><code>#csv_data &lt;- read.csv(&quot;data/2019-20_pbp.csv&quot;)</code></pre>
+<ul>
+<li>loading in from .xlsx</li>
+</ul>
+<pre class="r"><code>xlsx_data &lt;- read.xlsx(xlsxFile = &quot;data/nbadata.xlsx&quot;)</code></pre>
 </div>
 <div id="exploring-dplyr" class="section level2">
 <h2>Exploring dplyr</h2>
@@ -268,23 +273,255 @@ tictoc::toc()</code></pre>
 <li>Group_by + summarise</li>
 </ul>
 <p>The “pipe” operator takes the object on the left-hand-side and passes it into the object on the right-hand-side. Rather than write <code>f(x, y)</code> one could write <code>x %&gt;% f(y)</code>.</p>
-<p>Let’s <code>select()</code> the <code>shooting_play</code>, runs allowed, wins, year, and team name.</p>
-<pre class="r"><code># teams %&gt;% 
-#  select(R, RA, W, yearID, name)</code></pre>
+<p>Let’s <code>select()</code> the <code>period_number</code>and <code>clock_display_value</code>.</p>
+<pre class="r"><code>clock_data &lt;- nba_pbp %&gt;% 
+  select(period_number, clock_display_value) %&gt;%
+  head(10000)
+clock_data</code></pre>
+<pre><code>## # A tibble: 10,000 x 2
+##    period_number clock_display_value
+##            &lt;int&gt; &lt;chr&gt;              
+##  1             1 12:00              
+##  2             1 11:46              
+##  3             1 11:27              
+##  4             1 11:23              
+##  5             1 11:21              
+##  6             1 11:21              
+##  7             1 11:21              
+##  8             1 11:21              
+##  9             1 11:05              
+## 10             1 10:42              
+## # ... with 9,990 more rows</code></pre>
+<p>Filters:</p>
+<pre class="r"><code>nba_pbp %&gt;%
+  filter(home_score == 100 &amp; away_score == 100)</code></pre>
+<pre><code>## # A tibble: 137 x 55
+##    shooting_play sequence_number period_display_value period_number home_score
+##    &lt;lgl&gt;         &lt;chr&gt;           &lt;chr&gt;                        &lt;int&gt;      &lt;int&gt;
+##  1 TRUE          681             4th Quarter                      4        100
+##  2 TRUE          683             4th Quarter                      4        100
+##  3 FALSE         684             4th Quarter                      4        100
+##  4 FALSE         685             4th Quarter                      4        100
+##  5 TRUE          687             4th Quarter                      4        100
+##  6 FALSE         688             4th Quarter                      4        100
+##  7 FALSE         689             4th Quarter                      4        100
+##  8 TRUE          684             4th Quarter                      4        100
+##  9 TRUE          636             4th Quarter                      4        100
+## 10 FALSE         637             4th Quarter                      4        100
+## # ... with 127 more rows, and 50 more variables: coordinate_x &lt;int&gt;,
+## #   coordinate_y &lt;int&gt;, scoring_play &lt;lgl&gt;, clock_display_value &lt;chr&gt;,
+## #   team_id &lt;chr&gt;, type_id &lt;chr&gt;, type_text &lt;chr&gt;, away_score &lt;int&gt;, id &lt;dbl&gt;,
+## #   text &lt;chr&gt;, score_value &lt;int&gt;, participants_0_athlete_id &lt;chr&gt;,
+## #   participants_1_athlete_id &lt;chr&gt;, participants_2_athlete_id &lt;chr&gt;,
+## #   season &lt;int&gt;, season_type &lt;int&gt;, away_team_id &lt;int&gt;, away_team_name &lt;chr&gt;,
+## #   away_team_mascot &lt;chr&gt;, away_team_abbrev &lt;chr&gt;, ...</code></pre>
+<pre class="r"><code>nba_pbp %&gt;%
+  filter((home_score &gt; 100 &amp; home_team_mascot == &quot;Heat&quot;) | (away_score &gt; 100 &amp; away_team_mascot == &quot;Heat&quot;)) %&gt;%
+  select(home_score, away_score, home_team_mascot, away_team_mascot)</code></pre>
+<pre><code>## # A tibble: 3,308 x 4
+##    home_score away_score home_team_mascot away_team_mascot
+##         &lt;int&gt;      &lt;int&gt; &lt;chr&gt;            &lt;chr&gt;           
+##  1         83        103 Raptors          Heat            
+##  2         83        103 Raptors          Heat            
+##  3         83        103 Raptors          Heat            
+##  4         83        103 Raptors          Heat            
+##  5         83        103 Raptors          Heat            
+##  6         83        103 Raptors          Heat            
+##  7         83        103 Raptors          Heat            
+##  8         83        103 Raptors          Heat            
+##  9         83        103 Raptors          Heat            
+## 10         83        103 Raptors          Heat            
+## # ... with 3,298 more rows</code></pre>
+<pre class="r"><code>nba_pbp %&gt;%
+  filter(home_score == c(120, 130, 140)) %&gt;%
+  arrange(desc(home_score)) %&gt;%
+  select(period_display_value, home_team_abbrev, away_team_abbrev, home_score, away_score)</code></pre>
+<pre><code>## Warning in home_score == c(120, 130, 140): longer object length is not a
+## multiple of shorter object length</code></pre>
+<pre><code>## # A tibble: 659 x 5
+##    period_display_value home_team_abbrev away_team_abbrev home_score away_score
+##    &lt;chr&gt;                &lt;chr&gt;            &lt;chr&gt;                 &lt;int&gt;      &lt;int&gt;
+##  1 4th Quarter          NY               SAC                     140        119
+##  2 4th Quarter          NY               SAC                     140        121
+##  3 4th Quarter          MIL              IND                     140        113
+##  4 4th Quarter          MIL              IND                     140        113
+##  5 4th Quarter          PHX              OKC                     140        103
+##  6 4th Quarter          IND              MIN                     140        137
+##  7 OT                   BOS              MIN                     140        132
+##  8 OT                   BOS              MIN                     140        134
+##  9 OT                   BOS              MIN                     140        134
+## 10 4th Quarter          HOU              MIL                     140        136
+## # ... with 649 more rows</code></pre>
+<pre class="r"><code>nba_pbp %&gt;%
+  filter(grepl(&#39;LeBron&#39;, text)) %&gt;%
+  head(1) %&gt;%
+  select(text) %&gt;%
+  pull()</code></pre>
+<pre><code>## [1] &quot;LeBron James misses 16-foot two point shot&quot;</code></pre>
+<p>Quick groupby intro:</p>
+<pre class="r"><code>nba_pbp %&gt;%
+  group_by(type_text) %&gt;%
+  count() %&gt;%
+  arrange(desc(n)) %&gt;%
+  select(type_text) %&gt;%
+  head(5)</code></pre>
+<pre><code>## # A tibble: 5 x 1
+## # Groups:   type_text [5]
+##   type_text        
+##   &lt;chr&gt;            
+## 1 Defensive Rebound
+## 2 Jump Shot        
+## 3 Substitution     
+## 4 Offensive Rebound
+## 5 Pullup Jump Shot</code></pre>
+<pre class="r"><code>nba_pbp %&gt;%
+  group_by(type_text) %&gt;%
+  summarise(mean_secs = mean(start_quarter_seconds_remaining), sd_secs = sd(start_quarter_seconds_remaining))</code></pre>
+<pre><code>## # A tibble: 131 x 3
+##    type_text                              mean_secs sd_secs
+##    &lt;chr&gt;                                      &lt;dbl&gt;   &lt;dbl&gt;
+##  1 &quot;3-Second Turnover&quot;                         377.    199.
+##  2 &quot;5-Second Back to the Basket Turnover&quot;      279.    294.
+##  3 &quot;5-Second Turnover&quot;                         289.    238.
+##  4 &quot;8-Second Turnover&quot;                         243.    235.
+##  5 &quot;Alley Oop Dunk Shot&quot;                       367.    206.
+##  6 &quot;Alley Oop Layup Shot&quot;                      366.    204.
+##  7 &quot;Away from Play Foul&quot;                       325.    226.
+##  8 &quot;Back Court Turnover&quot;                       356.    212.
+##  9 &quot;Bad Pass\nTurnover&quot;                        358.    207.
+## 10 &quot;Challenge&quot;                                 162.    124.
+## # ... with 121 more rows</code></pre>
+<p>Dropping NA values:</p>
+<pre class="r"><code>nba_pbp %&gt;% drop_na()</code></pre>
+<pre><code>## # A tibble: 0 x 55
+## # ... with 55 variables: shooting_play &lt;lgl&gt;, sequence_number &lt;chr&gt;,
+## #   period_display_value &lt;chr&gt;, period_number &lt;int&gt;, home_score &lt;int&gt;,
+## #   coordinate_x &lt;int&gt;, coordinate_y &lt;int&gt;, scoring_play &lt;lgl&gt;,
+## #   clock_display_value &lt;chr&gt;, team_id &lt;chr&gt;, type_id &lt;chr&gt;, type_text &lt;chr&gt;,
+## #   away_score &lt;int&gt;, id &lt;dbl&gt;, text &lt;chr&gt;, score_value &lt;int&gt;,
+## #   participants_0_athlete_id &lt;chr&gt;, participants_1_athlete_id &lt;chr&gt;,
+## #   participants_2_athlete_id &lt;chr&gt;, season &lt;int&gt;, season_type &lt;int&gt;, ...</code></pre>
+<pre class="r"><code>nba_pbp %&gt;% drop_na(participants_1_athlete_id)</code></pre>
+<pre><code>## # A tibble: 158,013 x 55
+##    shooting_play sequence_number period_display_value period_number home_score
+##    &lt;lgl&gt;         &lt;chr&gt;           &lt;chr&gt;                        &lt;int&gt;      &lt;int&gt;
+##  1 FALSE         4               1st Quarter                      1          0
+##  2 FALSE         7               1st Quarter                      1          0
+##  3 TRUE          16              1st Quarter                      1          3
+##  4 TRUE          22              1st Quarter                      1          7
+##  5 TRUE          24              1st Quarter                      1          7
+##  6 FALSE         26              1st Quarter                      1          7
+##  7 TRUE          28              1st Quarter                      1          7
+##  8 FALSE         31              1st Quarter                      1          7
+##  9 TRUE          49              1st Quarter                      1          9
+## 10 TRUE          62              1st Quarter                      1          9
+## # ... with 158,003 more rows, and 50 more variables: coordinate_x &lt;int&gt;,
+## #   coordinate_y &lt;int&gt;, scoring_play &lt;lgl&gt;, clock_display_value &lt;chr&gt;,
+## #   team_id &lt;chr&gt;, type_id &lt;chr&gt;, type_text &lt;chr&gt;, away_score &lt;int&gt;, id &lt;dbl&gt;,
+## #   text &lt;chr&gt;, score_value &lt;int&gt;, participants_0_athlete_id &lt;chr&gt;,
+## #   participants_1_athlete_id &lt;chr&gt;, participants_2_athlete_id &lt;chr&gt;,
+## #   season &lt;int&gt;, season_type &lt;int&gt;, away_team_id &lt;int&gt;, away_team_name &lt;chr&gt;,
+## #   away_team_mascot &lt;chr&gt;, away_team_abbrev &lt;chr&gt;, ...</code></pre>
+<p>Creating new columns with <code>mutate()</code>:</p>
+<pre class="r"><code>nba_pbp %&gt;%
+  mutate(total_score = home_score + away_score) %&gt;%
+  select(home_score, away_score, total_score)</code></pre>
+<pre><code>## # A tibble: 569,719 x 3
+##    home_score away_score total_score
+##         &lt;int&gt;      &lt;int&gt;       &lt;int&gt;
+##  1          0          0           0
+##  2          0          0           0
+##  3          0          0           0
+##  4          0          0           0
+##  5          0          0           0
+##  6          1          0           1
+##  7          2          0           2
+##  8          3          0           3
+##  9          3          3           6
+## 10          5          3           8
+## # ... with 569,709 more rows</code></pre>
+<pre class="r"><code>nba_pbp %&gt;%
+  mutate(home_team_favored = ifelse(game_spread &lt; 0, TRUE, FALSE)) %&gt;%
+  select(game_spread, home_team_favored, home_team_abbrev) %&gt;%
+  arrange(desc(home_team_favored))</code></pre>
+<pre><code>## # A tibble: 569,719 x 3
+##    game_spread home_team_favored home_team_abbrev
+##          &lt;dbl&gt; &lt;lgl&gt;             &lt;chr&gt;           
+##  1        -7.5 TRUE              ATL             
+##  2        -7.5 TRUE              ATL             
+##  3        -7.5 TRUE              ATL             
+##  4        -7.5 TRUE              ATL             
+##  5        -7.5 TRUE              ATL             
+##  6        -7.5 TRUE              ATL             
+##  7        -7.5 TRUE              ATL             
+##  8        -7.5 TRUE              ATL             
+##  9        -7.5 TRUE              ATL             
+## 10        -7.5 TRUE              ATL             
+## # ... with 569,709 more rows</code></pre>
 </div>
-<div id="try-it-yourself" class="section level2">
-<h2>Try it yourself</h2>
-<ul>
-<li>have a few simple exercises to practice basic dplyr functions</li>
-<li>maybe one of each function</li>
-</ul>
-</div>
-<div id="combining-it-together" class="section level2">
-<h2>Combining it together</h2>
-<ul>
-<li>cover join stuff</li>
-<li>getting min and max of some variables</li>
-</ul>
+<div id="example-who-had-the-best-record-against-the-spread" class="section level2">
+<h2>Example: Who had the best record against the spread?</h2>
+<pre class="r"><code>spread_data &lt;- nba_pbp %&gt;%
+  group_by(game_id) %&gt;%
+  slice(which.max(game_play_number)) %&gt;%
+  select(game_spread, home_team_abbrev, away_team_abbrev, home_score, away_score) %&gt;%
+  mutate(score_diff = away_score - home_score, home_covered = ifelse(score_diff&lt;game_spread, TRUE, FALSE),
+         away_covered = ifelse(score_diff&gt;game_spread, TRUE, FALSE))</code></pre>
+<pre><code>## Adding missing grouping variables: `game_id`</code></pre>
+<pre class="r"><code>spread_data</code></pre>
+<pre><code>## # A tibble: 1,221 x 9
+## # Groups:   game_id [1,221]
+##      game_id game_spread home_team_abbrev away_team_abbrev home_score away_score
+##        &lt;int&gt;       &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;                 &lt;int&gt;      &lt;int&gt;
+##  1 401265784        -7.5 ATL              ORL                     112        116
+##  2 401265785        -1.5 DET              NY                       84         90
+##  3 401265786        -3.5 CHI              HOU                     104        125
+##  4 401265787         7   LAL              LAC                      87         81
+##  5 401265788        -5.5 POR              SAC                     127        102
+##  6 401265789         6   CHA              TOR                     100        111
+##  7 401265790         5   CLE              IND                     107        104
+##  8 401265791        -6.5 SA               OKC                     108        121
+##  9 401265792        -4.5 MIL              DAL                     102        112
+## 10 401265833        -2   MIN              MEM                     105        107
+## # ... with 1,211 more rows, and 3 more variables: score_diff &lt;int&gt;,
+## #   home_covered &lt;lgl&gt;, away_covered &lt;lgl&gt;</code></pre>
+<pre class="r"><code>spread_home &lt;- spread_data %&gt;% 
+  group_by(home_team_abbrev, home_covered) %&gt;%
+  count() %&gt;%
+  pivot_wider(names_from = home_covered, values_from = n)
+spread_home</code></pre>
+<pre><code>## # A tibble: 31 x 3
+## # Groups:   home_team_abbrev [31]
+##    home_team_abbrev `FALSE` `TRUE`
+##    &lt;chr&gt;              &lt;int&gt;  &lt;int&gt;
+##  1 ATL                   18     28
+##  2 BKN                   19     25
+##  3 BOS                   20     20
+##  4 CHA                   18     20
+##  5 CHI                   22     16
+##  6 CLE                   20     18
+##  7 DAL                   25     15
+##  8 DEN                   23     20
+##  9 DET                   19     19
+## 10 DUR                    1     NA
+## # ... with 21 more rows</code></pre>
+<pre class="r"><code>spread_away &lt;- spread_data %&gt;% 
+  group_by(away_team_abbrev, away_covered) %&gt;%
+  count() %&gt;%
+  pivot_wider(names_from = away_covered, values_from = n)
+
+merge(spread_home, spread_away, by.x=&quot;home_team_abbrev&quot;, by.y=&quot;away_team_abbrev&quot;) %&gt;%
+  mutate(cover_perc=(TRUE.x + TRUE.y)/(TRUE.x + TRUE.y + FALSE.x + FALSE.y)) %&gt;%
+  rename(team=home_team_abbrev) %&gt;%
+  arrange(desc(cover_perc)) %&gt;%
+  head(5) %&gt;%
+  select(team, cover_perc)</code></pre>
+<pre><code>##   team cover_perc
+## 1   NY  0.6172840
+## 2  PHX  0.5714286
+## 3 UTAH  0.5697674
+## 4  MEM  0.5542169
+## 5  WSH  0.5487805</code></pre>
 </div>
 </div>
 
