@@ -8,6 +8,12 @@ Often times, especially with sports data, data cleaning and wrangling is going
 to be 50% of the work already. Learning how to efficiently clean and move data 
 around is going to be essential for any data scientist and sports analyst. 
 
+### Recording 
+
+This live workshop was held on 2/17/2022.
+
+https://duke.zoom.us/rec/share/hYWzsvsu6EY_9Bp-H7UZyXRVjQePB15jEUEYNq6fxdQbFxiJ9tskl10NHKv8S899.ytdn0vLaAEQ1Uim7?startTime=1645146242000
+
 ## Loading Data
 
 Loading in data is going to be essential to any project. Last time we used data
