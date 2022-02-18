@@ -53,6 +53,15 @@ data <- read.xlsx(xlsxFile = "data/nbadata.xlsx")
 
 3. String Parsing
 
+```{r}
+names <- strsplit(data$Player, "\\\\")
+data <- data %>%
+  separate(Player, "Player",  "\\\\") %>%
+  group_by(Player) %>%
+  summarise(threes = mean(`3PA`))
+```
+
+
 Lets try to fix our issue with the names of each player. 
 
 
@@ -67,6 +76,8 @@ Here a few exercises that are more guided and easier to complete.
 3. Who is leading the league in turnovers per game? 
 
 4. How many 3 point attempts does the average NBA player attempt per game? How many more does Steph Curry attempt? 
+
+grepl('Stephen Curry', text)
 
 
 
@@ -88,5 +99,32 @@ If you are stuck, first google, then reach out for help.
 8. Which Power Forward (PF) has the largest differential between their offensive and defensive rebounding stats per game?
 
 CHALLENGE: Create a report of the 2021-2022 Phoenix Suns describing the following: leaders in all 5 box score categories (points, rebounds, assists, steals, blocks), most frequent starting lineup, and most underrated player. For the last part to determine the underrated player, I want you to pick your statistical criterion to determine "underratedness" and give an analysis on why you choose that player. 
+
+
+
+
+
+
+
+
+
+
+install.packages("hoopR")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
