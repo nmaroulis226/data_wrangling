@@ -1,268 +1,164 @@
 ---
-title: "homework"
+title: "Data Wrangling"
 author: "Sean Li and Ben Thorpe"
-date: "Due before" 
-output: pdf_document
+date: "TBD"
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-The main goals of this homework is to let you practice data loading, data cleaning, and finding useful information. It will mimic the process you will go through in a real sports analysis endeavor.
-
-Remember, this is important because often times in the project, half the work is getting the right data!
-
-## Homework Instructions
-
-Complete the exercises below through creating a new RMD file in the same repository you had your first homework done in. You are also welcome to create a new repository to do this homework too.
-
-Data for this homework can be found through the class repository. You can obtain it through downloading the file directly from the repository on Github or downloading the data from <https://www.basketball-reference.com/leagues/NBA_2022_per_game.html>
-
-Once you are done, commit and push one last time to make sure all your changes are tracked. Then fill out the google form below.
-
-TURN IT IN HERE: <https://forms.gle/PVqBb7JhaaKnTvAXA>
-
-## Exercises
-
-```{r libraries}
+```{r packages}
 library(tidyverse)
+library(hoopR)
 library(openxlsx)
 ```
 
-### Loading in the Data
 
-We will be working with 2021-2022 NBA Player Stats Data.
+# Data Wrangling
 
-1.  Load in the data (make sure datafile is in repository folder!!)
+## Loading in Data
+
+- loading in from packages
 
 ```{r}
-data <- read.xlsx(xlsxFile = "data/nbadata.xlsx")
+tictoc::tic()
+progressr::with_progress({
+  nba_pbp <- hoopR::load_nba_pbp(2021)
+})
+tictoc::toc()
 ```
 
-2.  Take a look at the data using glimpse()... what seems to be a bit off about the player names?
-
 ```{r}
-data |>
-  glimpse()
+glimpse(nba_pbp)
 ```
 
-There are two slashes after the players name with some type of username or something.
-
-3.  String Parsing
+- loading in from .csv
 
 ```{r}
-names <- strsplit(data$Player, "\\\\")
-data <- data %>%
-  separate(Player, "Player",  "\\\\") %>%
-  group_by(Player) %>%
-  summarise(threes = mean(`3PA`))
+#csv_data <- read.csv("data/2019-20_pbp.csv")
 ```
 
-Lets try to fix our issue with the names of each player.
 
-### Training Wheels
-
-Here a few exercises that are more guided and easier to complete.
-
-1.  How many players are on the Charlotte Hornets?
+- loading in from .xlsx
 
 ```{r}
-nba <- read.xlsx(xlsxFile = "data/nbadata.xlsx")
-nba |>
-  group_by(Tm) |>
-  filter(Tm == "CHO") |>
-  summarise(num_players_CHO = n())
+xlsx_data <- read.xlsx(xlsxFile = "data/nbadata.xlsx")
 ```
 
-There are 17 players on the Charlotte Hornets.
+## Exploring dplyr
 
-2.  How many shooting guards do the Milwaukee Bucks have?
+dplyr is a package within the tidyverse
+
+- Select,filter, arrange, mutate, summarise
+- split into row and column functions 
+- splice() and rename() and drop NA
+- Have them try a few exercises
+- Group_by + summarise 
+
+The "pipe" operator takes the object on the left-hand-side and passes it into
+the object on the right-hand-side. Rather than write `f(x, y)` one could
+write `x %>% f(y)`.
+
+Let's `select()` the `period_number`and `clock_display_value`.
 
 ```{r}
-nba |> 
-  group_by(Tm) |>
-  filter(Tm == "MIL") |>
-  filter(Pos == "SG") |>
-  summarise(num_SG_MIL = n())
+clock_data <- nba_pbp %>% 
+  select(period_number, clock_display_value) %>%
+  head(10000)
+clock_data
 ```
 
-There are 5 shooting guards on the Milwaukee Bucks.
-
-3.  Who is leading the league in turnovers per game?
+Filters:
 
 ```{r}
-nba |> 
-  select(Player, TOV) |> 
-  arrange(desc(TOV))
+nba_pbp %>%
+  filter(home_score == 100 & away_score == 100)
+
+nba_pbp %>%
+  filter((home_score > 100 & home_team_mascot == "Heat") | (away_score > 100 & away_team_mascot == "Heat")) %>%
+  select(home_score, away_score, home_team_mascot, away_team_mascot)
+
+nba_pbp %>%
+  filter(home_score == c(120, 130, 140)) %>%
+  arrange(desc(home_score)) %>%
+  select(period_display_value, home_team_abbrev, away_team_abbrev, home_score, away_score)
+
+nba_pbp %>%
+  filter(grepl('LeBron', text)) %>%
+  head(1) %>%
+  select(text) %>%
+  pull()
 ```
 
-James Harden has the most turnovers per game.
 
-4.  How many 3 point attempts does the average NBA player attempt per game? How many more does Steph Curry attempt?
-
-grepl('Stephen Curry', text)
+Quick groupby intro:
 
 ```{r}
-nba |> 
-  select("3PA") |>
-  select(where(is.numeric)) |>
-  colMeans(na.rm = TRUE)
-
-nba |> 
-  filter(Player == "Stephen Curry\\curryst01") |>
-  select("Player", "3PA")
+nba_pbp %>%
+  group_by(type_text) %>%
+  count() %>%
+  arrange(desc(n)) %>%
+  select(type_text) %>%
+  head(5)
   
+
+nba_pbp %>%
+  group_by(type_text) %>%
+  summarise(mean_secs = mean(start_quarter_seconds_remaining), sd_secs = sd(start_quarter_seconds_remaining))
 ```
 
-The average NBA player attemps 2.57734 3 point shots per game. Steph Curry averages 13.3-2.57734 = 10.72266 more 3 point shots per game than the average pNBA player.
-
-### Rumble.
-
-These are questions made to have you think how to problem solve. I would recommend breaking down some of these problems into several steps. For example, to find the top 5 22-year old players who have high assist to turnover ratios this would be my thinking: "first i need to get all players who are 22 years old who have played at least 10 games. Then I need to make a new variable to track assist to turnover ratio. Then I need to sort the names by descending according to that ratio. Then I need to display the first 5 unique names."
-
-If you are stuck, first google, then reach out for help.
-
-5.  How many players are in this dataset? (HINT: its not just the number of rows)
+Dropping NA values:
 
 ```{r}
-nba |>
-  summarise(num_players = n())
+nba_pbp %>% drop_na()
+
+nba_pbp %>% drop_na(participants_1_athlete_id)
 ```
 
-609 players
-
-6.  Find Atlantic Division (Nets, 76ers, Raptors, Celtics, Knicks) teams' top 3 point shooter based on 3PT percentage that has attempted at least 3 a game.
+Creating new columns with `mutate()`:
 
 ```{r}
-nba |>
-  filter(`3PA` >= 3.0) |>
-  filter(Tm == c("BRK", "PHI", "TOR", "BOS", "NYK")) |>
-  select(Player, Pos, `3PA`, `3P%`) |>
-  arrange(desc(`3P%`))
+nba_pbp %>%
+  mutate(total_score = home_score + away_score) %>%
+  select(home_score, away_score, total_score)
+
+nba_pbp %>%
+  mutate(home_team_favored = ifelse(game_spread < 0, TRUE, FALSE)) %>%
+  select(game_spread, home_team_favored, home_team_abbrev) %>%
+  arrange(desc(home_team_favored))
 ```
 
-Joe Harris has the highest 3 point percentage in the Atlantic division for players that have attempted more than 3 threes.
 
-7.  What is the average age on the Minnesota Timberwolves?
+## Example: Who had the best record against the spread?
 
 ```{r}
-nba |>
-  group_by(Tm) |>
-  filter(Tm == "MIN") |>
-  summarise(avg_age = mean(Age))
+spread_data <- nba_pbp %>%
+  group_by(game_id) %>%
+  slice(which.max(game_play_number)) %>%
+  select(game_spread, home_team_abbrev, away_team_abbrev, home_score, away_score) %>%
+  mutate(score_diff = away_score - home_score, home_covered = ifelse(score_diff<game_spread, TRUE, FALSE),
+         away_covered = ifelse(score_diff>game_spread, TRUE, FALSE))
+spread_data
+
+spread_home <- spread_data %>% 
+  group_by(home_team_abbrev, home_covered) %>%
+  count() %>%
+  pivot_wider(names_from = home_covered, values_from = n)
+spread_home
+
+spread_away <- spread_data %>% 
+  group_by(away_team_abbrev, away_covered) %>%
+  count() %>%
+  pivot_wider(names_from = away_covered, values_from = n)
+
+merge(spread_home, spread_away, by.x="home_team_abbrev", by.y="away_team_abbrev") %>%
+  mutate(cover_perc=(TRUE.x + TRUE.y)/(TRUE.x + TRUE.y + FALSE.x + FALSE.y)) %>%
+  rename(team=home_team_abbrev) %>%
+  arrange(desc(cover_perc)) %>%
+  head(5) %>%
+  select(team, cover_perc)
 ```
-
-Average age on the Minnesota Timberwolves is 24.55556.
-
-8.  Which Power Forward (PF) has the largest differential between their offensive and defensive rebounding stats per game?
-
-```{r}
-nba |> 
-  filter(Pos == "PF") |>
-  select(Player, Pos, DRB, ORB) |>
-  mutate(diff_rebounds = DRB - ORB) |>
-  arrange(desc(diff_rebounds))
-```
-
-Giannis has the largest differential between offensive and defensive rebounds per game.
-
-CHALLENGE: Create a report of the 2021-2022 Phoenix Suns describing the following: leaders in all 5 box score categories (points, rebounds, assists, steals, blocks), most frequent starting lineup, and most underrated player. For the last part to determine the underrated player, I want you to pick your statistical criterion to determine "underratedness" and give an analysis on why you choose that player.
-
-**Points**
-
-```{r}
-nba |>
-  filter(Tm == "PHO") |>
-  select(Player, Pos, PTS) |>
-  arrange(desc(PTS))
-```
-
-Devin Booker puts up the most points per game at 23.9.
-
-**Rebounds**
-
-```{r}
-nba |>
-  filter(Tm == "PHO") |>
-  select(Player, Pos, TRB) |>
-  arrange(desc(TRB))
-```
-
-Deandre Ayton puts up the most rebounds per game at 11.1.
-
-**Assists**
-
-```{r}
-nba |>
-  filter(Tm == "PHO") |>
-  select(Player, Pos, AST) |>
-  arrange(desc(AST))
-```
-
-Chris Paul puts up the most assists per game at 10.1.
-
-**Steals**
-
-```{r}
-nba |>
-  filter(Tm == "PHO") |>
-  select(Player, Pos, STL) |>
-  arrange(desc(STL))
-```
-
-Chris Paul puts up the most steals per game at 1.9.
-
-**Blocks**
-
-```{r}
-nba |>
-  filter(Tm == "PHO") |>
-  select(Player, Pos, BLK) |>
-  arrange(desc(BLK))
-```
-
-Bismack Biyombo puts up the most blocks per game at 2.0.
-
-**Starting Lineup**
-
-```{r}
-nba |>
-  filter(Tm == "PHO") |>
-  select(Player, Pos, GS, MP) |>
-  arrange(desc(GS))
-```
-
-The players that started most frequently were Mikal Bridges, Chris Paul, Jae Crowder, Devin Booker, and Deandre Ayton.
-
-**Most Underrated Player** The Suns are a great team with so much talent all around. Everybody on the Suns plays their part, making them one of the most well-rounded teams. We know the big stars: Devin Booker, Chris Paul, and Deandre Ayton. We also know the smaller guys the make a huge difference in the game; guys like Mikal Bridges, one of the best defenders in the league, and the talented Cameron Payne. However, there is one player on the team that may not be as hyped up as the rest. Despite starting in zero games and only playing the 7th most minutes per game out of everyone on the team, Bismack Biyombo ranks in the top five for every single major box score category.
-
-Relative to the team, Biyombo puts up the:
-
--   4th most points per game at 13.5
-
--   3rd most rebounds per game at 6.0
-
--   4th (tied) most assists per game at 2.0
-
--   2nd most steals per game at 1.5
-
--   And the most blocks per game at 2.0, over doubling anyone else on the team.
-
-The numbers only get better when you compare him to other centers around the league:
-
-```{r}
-nba |>
-  filter(Pos == "C") |>
-  select(Player, Tm, `FG%`, `2P%`) |>
-  arrange(desc(`2P%`))
-nba |>
-  group_by(Pos) |>
-  drop_na(`2P%`) |>
-  filter(Pos == "C") |>
-  summarise(avg_2Percent = mean(`2P%`))
-```
-
-Biyombo has the best field goal and 2 point field goal percentage for a center **in the entire league**. The average 2 point percentage is 55.19%. Biyombo makes a whopping 84.6% of all of his shots. Unreal.
-
-When analyzing how great the Suns are, Biyombo can often go unnoticed. For never starting a game in the whole year, it is crazy how he puts up the stats. And remember, we are talking about someone on one of the best teams in the league. Biyombo's work does not go completelt unnoticed, but we need to put some more love on his name.
